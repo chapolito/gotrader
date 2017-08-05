@@ -3,10 +3,32 @@ package main
 import (
 	"time"
 	"fmt"
-	"os"
+	// "os"
+	//"github.com/gotrader/createBuyOrder"
   exchange "github.com/preichenberger/go-coinbase-exchange"
 	ws "github.com/gorilla/websocket"
 )
+
+//
+// *~*~*~*~*~*~*~*~*~**~*~*~*~*~*~*~*~*
+// Go Trader
+// *~*~*~*~*~*~*~*~*~**~*~*~*~*~*~*~*~*
+//
+// Initialization
+// 	1. what is the currentPrice?
+// 	2. what are the buys?
+// 	3. for each level below the currentPrice is there an open buy?
+// 		a. if yes do nothing
+//		b. if no, create a buy
+//
+//
+// Monitoring
+//	1. If a sell happens:
+//		a. set buy at sell.Price-stopGap
+//		b. remove sell from existingSells
+// 	2. If a buy happens, create a sell at buy.Price+stopGap
+//
+
 
 type Order struct {
 	Type string
@@ -17,35 +39,26 @@ type Order struct {
 
 type Orders []Order
 
+//type CreateBuyOrder func(float64, float64, *Client)
+
+var existingBuys, existingSells Orders
+var totalBuys, totalSells float64
+
+var client *exchange.Client
 
 func main() {
 
-	secret := os.Getenv("TEST_COINBASE_SECRET")
-	key := os.Getenv("TEST_COINBASE_KEY")
-	passphrase := os.Getenv("TEST_COINBASE_PASSPHRASE")
-	fmt.Printf("secret: " + secret + "\n key: " + key + "\n passphrase: " + passphrase + "\n")
+	// secret := os.Getenv("TEST_COINBASE_SECRET")
+	// key := os.Getenv("TEST_COINBASE_KEY")
+	// passphrase := os.Getenv("TEST_COINBASE_PASSPHRASE")
+	// fmt.Printf("secret: " + secret + "\n key: " + key + "\n passphrase: " + passphrase + "\n")
 
 	// or unsafe hardcode way
 	// secret = "exposedsecret"
 	// key = "exposedkey"
 	// passphrase = "exposedpassphrase"
 
-	// Initialization
-	// 	1. what is the currentPrice?
-	// 	2. what are the buys?
-	// 	3. for each level below the currentPrice is there an open buy?
-	// 		a. if yes do nothing
-	//		b. if no, create a buy
-	//
-	//
-	// Monitoring
-	//	1. If a sell happens:
-	//		a. set buy at sell.Price-stopGap
-	//		b. remove sell from existingSells
-	// 	2. If a buy happens, create a sell at buy.Price+stopGap
-
-
-	client := exchange.NewTestClient()
+	client = exchange.NewTestClient()
 
 	var stops []float64
 	currentFakePrice := 1.0
@@ -58,16 +71,6 @@ func main() {
 	for i := firstStop; i <= lastStop; i += stopGap {
 		stops = append(stops, i)
 	}
-
-	//printSlice(stops)
-
-
-
-
-	var existingBuys, existingSells Orders
-	var totalBuys, totalSells float64
-
-
 
 	// Get Accounts
 	accounts, err := client.GetAccounts()
@@ -146,25 +149,7 @@ func main() {
 		if contains(pricesExisting(existingBuys), stops[a]) {
 			fmt.Printf("Buy existing at: %f\n", stops[a])
 		} else {
-			//createBuyOrder(stops[a], 1.1, client)
-
-			size := float64(int(((accounts[usdIndex].Balance / totalStops) / stops[a]) * 10000)) / 10000
-
-			thisOrder := exchange.Order {
-				Price: stops[a],
-				Size: size,
-				Side: "buy",
-				PostOnly: true,
-				ProductId: "BTC-USD",
-			}
-
-			savedOrder, err := client.CreateOrder(&thisOrder)
-			if err != nil {
-				println(err.Error())
-			} else {
-				fmt.Printf("Buy Order Created for %f at $%f\n", size, stops[a])
-				existingBuys = append(existingBuys, Order{"buy", savedOrder.Id, stops[a], size})
-			}
+			createBuyOrder(stops[a], float64(int(((accounts[usdIndex].Balance / totalStops) / stops[a]) * 10000)) / 10000)
 		}
 	}
 
@@ -312,13 +297,25 @@ func main() {
 	// }
 }
 
-// func createBuyOrder(price float64, size float64, client interface{}) {
-//
-// }
+func createBuyOrder(price float64, size float64) {
 
-// func printSlice(s []float64) {
-// 	fmt.Printf("len=%d cap=%d %v\n", len(s), cap(s), s)
-// }
+	thisOrder := exchange.Order {
+		Price: price,
+		Size: size,
+		Side: "buy",
+		PostOnly: true,
+		ProductId: "BTC-USD",
+	}
+
+	savedOrder, err := client.CreateOrder(&thisOrder)
+	if err != nil {
+		println(err.Error())
+	} else {
+		fmt.Printf("Buy Order Created for %f at $%f\n", size, price)
+		existingBuys = append(existingBuys, Order{"buy", savedOrder.Id, price, size})
+	}
+}
+
 
 func contains(s []float64, e float64) bool {
   for _, a := range s {
