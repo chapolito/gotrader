@@ -3,7 +3,7 @@ package main
 import (
 	"time"
 	"fmt"
-	// "os"
+	//"os"
 	//"github.com/gotrader/createBuyOrder"
   exchange "github.com/preichenberger/go-coinbase-exchange"
 	ws "github.com/gorilla/websocket"
@@ -149,7 +149,7 @@ func main() {
 		if contains(pricesExisting(existingBuys), stops[a]) {
 			fmt.Printf("Buy existing at: %f\n", stops[a])
 		} else {
-			createBuyOrder(stops[a], float64(int(((accounts[usdIndex].Balance / totalStops) / stops[a]) * 10000)) / 10000)
+			CreateBuyOrder(stops[a], float64(int(((accounts[usdIndex].Balance / totalStops) / stops[a]) * 10000)) / 10000)
 		}
 	}
 
@@ -297,24 +297,24 @@ func main() {
 	// }
 }
 
-func createBuyOrder(price float64, size float64) {
-
-	thisOrder := exchange.Order {
-		Price: price,
-		Size: size,
-		Side: "buy",
-		PostOnly: true,
-		ProductId: "BTC-USD",
-	}
-
-	savedOrder, err := client.CreateOrder(&thisOrder)
-	if err != nil {
-		println(err.Error())
-	} else {
-		fmt.Printf("Buy Order Created for %f at $%f\n", size, price)
-		existingBuys = append(existingBuys, Order{"buy", savedOrder.Id, price, size})
-	}
-}
+// func createBuyOrder(price float64, size float64) {
+//
+// 	thisOrder := exchange.Order {
+// 		Price: price,
+// 		Size: size,
+// 		Side: "buy",
+// 		PostOnly: true,
+// 		ProductId: "BTC-USD",
+// 	}
+//
+// 	savedOrder, err := client.CreateOrder(&thisOrder)
+// 	if err != nil {
+// 		println(err.Error())
+// 	} else {
+// 		fmt.Printf("Buy Order Created for %f at $%f\n", size, price)
+// 		existingBuys = append(existingBuys, Order{"buy", savedOrder.Id, price, size})
+// 	}
+// }
 
 
 func contains(s []float64, e float64) bool {
