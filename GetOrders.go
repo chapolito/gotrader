@@ -37,7 +37,7 @@ func GetOrders() {
 
 	// Match existing buys orders to stops. If no match create a buy order at that stop.
 	for a := 0; a < stopsUnderCurrentPrice; a++ {
-		if contains(pricesExisting(existingBuys), stops[a]) {
+		if Contains(PricesExisting(existingBuys), stops[a]) {
 			fmt.Printf("Buy existing at: %f\n", stops[a])
 		} else {
 			CreateBuyOrder(stops[a], float64(int(((accounts[usdIndex].Balance / totalStops) / stops[a]) * 10000)) / 10000)
@@ -48,8 +48,27 @@ func GetOrders() {
 
 	// Print out existingSells at stops
 	for a := len(stops) - 1; a > stopsUnderCurrentPrice; a-- {
-		if contains(pricesExisting(existingSells), stops[a]) {
+		if Contains(PricesExisting(existingSells), stops[a]) {
 			fmt.Printf("Sell existing at: %f\n", stops[a])
 		}
 	}
+
+  PrintCurrentState()
+}
+
+func Contains(s []float64, e float64) bool {
+  for _, a := range s {
+    if a == e {
+      return true
+    }
+  }
+  return false
+}
+
+func PricesExisting(o Orders) []float64 {
+	var pricesWithBuys []float64
+	for _, a := range o {
+		pricesWithBuys = append(pricesWithBuys, a.Price)
+	}
+	return pricesWithBuys
 }
