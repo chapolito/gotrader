@@ -17,7 +17,7 @@ func GetOrders() {
     }
 
     for _, o := range rawOrders {
-      if o.Type == "limit" && o.ProductId == "BTC-USD" {
+      if o.Type == "limit" && o.ProductId == ProductId {
         if o.Side == "sell" {
           existingSells = append(existingSells, Order{"sell", o.Id, o.Price, o.Size})
         } else if o.Side == "buy" {
@@ -40,7 +40,7 @@ func GetOrders() {
 		if Contains(PricesExisting(existingBuys), stops[a]) {
 			fmt.Printf("Buy existing at: %f\n", stops[a])
 		} else {
-			CreateBuyOrder(stops[a], float64(int(((accounts[usdIndex].Balance / totalStops) / stops[a]) * 10000)) / 10000)
+			CreateOrder("buy", stops[a], float64(int(((accounts[usdIndex].Balance / totalStops) / stops[a]) * 10000)) / 10000)
 		}
 	}
 

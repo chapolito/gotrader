@@ -16,7 +16,7 @@ func MonitorExchange() {
 
   subscribe := map[string]string{
     "type": "subscribe",
-    "product_id": "ETH-USD",
+    "product_id": ProductId,
   }
   if err := wsConn.WriteJSON(subscribe); err != nil {
     println(err.Error())
@@ -31,7 +31,7 @@ func MonitorExchange() {
     }
 
     if message.Type == "match"  {
-			
+
 			if currentPrice == 0.0 {
 				GetOrders()
 			}
@@ -50,7 +50,7 @@ func MonitorExchange() {
             // But is message.Size just the size of that match? (could be partial)
 
             // create Sell at buy price plus stopGap
-            CreateSellOrder(o.Price + stopGap, o.Size)
+            CreateOrder("sell", o.Price + stopGap, o.Size)
           }
         }
       } else if message.Side == "sell" {
@@ -64,7 +64,7 @@ func MonitorExchange() {
             // But is message.Size just the size of that match? (could be partial)
 
             // create Buy at sell price minus stopGap
-            CreateBuyOrder(o.Price - stopGap, o.Size)
+            CreateOrder("buy", o.Price - stopGap, o.Size)
           }
         }
       }

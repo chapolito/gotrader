@@ -25,19 +25,20 @@ import (
 //
 
 var existingBuys, existingSells Orders
-var totalBuys, totalSells, currentPrice, currentFakePrice, firstStop, lastStop, stopGap, totalStops float64
+var totalBuys, totalSells, currentPrice, firstStop, lastStop, stopGap, totalStops float64
 var stops []float64
 var btcIndex, usdIndex int
+var ProductId string
 
 var accounts []exchange.Account
 var client *exchange.Client
 
 func main() {
 
-	currentFakePrice = 1.0
-	firstStop = 500.0
-	lastStop = 1500.0
-	stopGap = 25.0
+	ProductId = "BTC-USD"
+	firstStop = 140.0
+	lastStop = 340.0
+	stopGap = 5.0
 	totalStops = (lastStop - firstStop) / stopGap
 
 	for i := firstStop; i <= lastStop; i += stopGap {
