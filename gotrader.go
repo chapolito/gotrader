@@ -3,7 +3,7 @@ package main
 import (
 	//"time"
 	//"fmt"
-	//"os"
+	"os"
   exchange "github.com/preichenberger/go-coinbase-exchange"
 )
 
@@ -27,15 +27,17 @@ import (
 var existingBuys, existingSells Orders
 var totalBuys, totalSells, currentPrice, firstStop, lastStop, stopGap, totalStops float64
 var stops []float64
-var btcIndex, usdIndex int
-var ProductId string
+var btcIndex, usdIndex, ethIndex int
+var productId string
 
 var accounts []exchange.Account
 var client *exchange.Client
 
 func main() {
 
-	ProductId = "BTC-USD"
+	currentPrice = 0.0
+
+	productId = "ETH-USD"
 	firstStop = 140.0
 	lastStop = 340.0
 	stopGap = 5.0
@@ -45,12 +47,12 @@ func main() {
 		stops = append(stops, i)
 	}
 
-	// secret := os.Getenv("TEST_COINBASE_SECRET")
-	// key := os.Getenv("TEST_COINBASE_KEY")
-	// passphrase := os.Getenv("TEST_COINBASE_PASSPHRASE")
-	// fmt.Printf("secret: " + secret + "\n key: " + key + "\n passphrase: " + passphrase + "\n")
+	secret := os.Getenv("COINBASE_SECRET")
+	key := os.Getenv("COINBASE_KEY")
+	passphrase := os.Getenv("COINBASE_PASSPHRASE")
 
-	client = exchange.NewTestClient()
+	client = exchange.NewClient(secret, key, passphrase)
+	// client = exchange.NewTestClient()
 
 	GetAccounts()
 

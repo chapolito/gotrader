@@ -16,7 +16,7 @@ func CreateOrder(side string, price float64, size float64) {
 		Size: size,
 		Side: side,
 		PostOnly: true,
-		ProductId: ProductId,
+		ProductId: productId,
 	}
 
 	savedOrder, err := client.CreateOrder(&thisOrder)
@@ -24,6 +24,11 @@ func CreateOrder(side string, price float64, size float64) {
 		println(err.Error())
 	} else {
 		fmt.Printf("%s order created for %f at $%f\n", savedOrder.Side, savedOrder.Size, savedOrder.Price)
-		GetOrders()
+
+		if side == "sell" {
+			existingSells = append(existingSells, Order{"sell", savedOrder.Id, savedOrder.Size, savedOrder.Price})
+		} else if side == "buy" {
+			existingBuys = append(existingBuys, Order{"buy", savedOrder.Id, savedOrder.Size, savedOrder.Price})
+		}
 	}
 }

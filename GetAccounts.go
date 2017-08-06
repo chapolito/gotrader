@@ -1,10 +1,5 @@
 package main
 
-// import (
-//   exchange "github.com/preichenberger/go-coinbase-exchange"
-// )
-
-
 // Get Accounts
 func GetAccounts() {
   var err error
@@ -21,6 +16,9 @@ func GetAccounts() {
     }
     if a.Currency == "BTC" {
       btcIndex = i
+    }
+    if a.Currency == "ETH" {
+      ethIndex = i
     }
   }
 }

@@ -16,7 +16,7 @@ func MonitorExchange() {
 
   subscribe := map[string]string{
     "type": "subscribe",
-    "product_id": ProductId,
+    "product_id": productId,
   }
   if err := wsConn.WriteJSON(subscribe); err != nil {
     println(err.Error())
@@ -33,10 +33,13 @@ func MonitorExchange() {
     if message.Type == "match"  {
 
 			if currentPrice == 0.0 {
+				currentPrice = message.Price
 				GetOrders()
+				InitializeOrders()
+			} else {
+				currentPrice = message.Price
 			}
 
-			currentPrice = message.Price
       fmt.Printf("Current Price: $%f\n\n", currentPrice)
 
 			if message.Side == "buy" {
@@ -51,6 +54,8 @@ func MonitorExchange() {
 
             // create Sell at buy price plus stopGap
             CreateOrder("sell", o.Price + stopGap, o.Size)
+						ResetOrders()
+						GetOrders()
           }
         }
       } else if message.Side == "sell" {
@@ -65,6 +70,8 @@ func MonitorExchange() {
 
             // create Buy at sell price minus stopGap
             CreateOrder("buy", o.Price - stopGap, o.Size)
+						ResetOrders()
+						GetOrders()
           }
         }
       }
