@@ -30,7 +30,7 @@ func GetOrders() {
   // Figure out how many stops are between the firstStop and currentPrice
 	var stopsUnderCurrentPrice int
 	for a := range stops {
-		if stops[a] <= currentFakePrice {
+		if stops[a] <= currentPrice {
 			stopsUnderCurrentPrice = a + 1
 		}
 	}
@@ -44,7 +44,7 @@ func GetOrders() {
 		}
 	}
 
-	fmt.Printf("Current Price: %f\n", currentFakePrice)
+	fmt.Printf("Current Price: %f\n", currentPrice)
 
 	// Print out existingSells at stops
 	for a := len(stops) - 1; a > stopsUnderCurrentPrice; a-- {

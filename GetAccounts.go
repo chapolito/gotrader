@@ -15,7 +15,7 @@ func GetAccounts() {
 
   // Print Balances
   for i, a := range accounts {
-    println(a.Balance)
+    //println(a.Balance)
     if a.Currency == "USD" {
       usdIndex = i
     }

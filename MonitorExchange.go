@@ -31,9 +31,16 @@ func MonitorExchange() {
     }
 
     if message.Type == "match"  {
+			
+			if currentPrice == 0.0 {
+				GetOrders()
+			}
+
+			currentPrice = message.Price
+      fmt.Printf("Current Price: $%f\n\n", currentPrice)
 
 			if message.Side == "buy" {
-        // run through my existing buys and see if this match aligns with any
+        // run through existing buys and see if this match aligns with any
         for _, o := range existingBuys {
           if message.MakerOrderId == o.Id {
             // Buy Happened!
@@ -61,10 +68,6 @@ func MonitorExchange() {
           }
         }
       }
-
-      // Regardless, update current price
-      currentPrice = message.Price
-      fmt.Printf("Current Price: $%f\n\n", currentPrice)
     }
   }
 }

@@ -53,8 +53,6 @@ func main() {
 
 	GetAccounts()
 
-	GetOrders()
-
 	MonitorExchange()
 
 }
