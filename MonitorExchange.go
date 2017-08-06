@@ -46,7 +46,7 @@ func MonitorExchange() {
         // run through existing buys and see if this match aligns with any
         for _, o := range existingBuys {
           if message.MakerOrderId == o.Id {
-            // Buy Happened!
+            println("\n\n** -- ** -- Buy Happened! -- ** -- **\n\n")
 
             // Check if this match is the complete order?
             // compare message.Size == o.Size ...
@@ -62,7 +62,7 @@ func MonitorExchange() {
         // run through my existing sells and see if this match aligns with any
         for _, o := range existingSells {
           if message.MakerOrderId == o.Id {
-            // Sell Happened!
+            println("\n\n** -- ** -- Sell Happened! -- ** -- **\n\n")
 
             // Check if this match is the complete order?
             // compare message.Size == o.Size ...

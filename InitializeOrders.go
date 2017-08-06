@@ -22,8 +22,8 @@ func InitializeOrders() {
     } else {
       //CreateOrder("buy", stops[a], float64(int(((accounts[usdIndex].Balance / totalStops) / stops[a]) * 10000)) / 10000)
 
-      // $1 Buys to test live
-      CreateOrder("buy", stops[a], float64(int(((40.0 / totalStops) / stops[a]) * 10000)) / 10000)
+      // Minimium Buys (0.01 ETH) to test live
+      CreateOrder("buy", stops[a], float64(int(((120.0 / totalStops) / stops[a]) * 10000)) / 10000)
     }
   }
 

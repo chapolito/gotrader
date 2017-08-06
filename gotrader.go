@@ -38,8 +38,8 @@ func main() {
 	currentPrice = 0.0
 
 	productId = "ETH-USD"
-	firstStop = 140.0
-	lastStop = 340.0
+	firstStop = 139.0
+	lastStop = 339.0
 	stopGap = 5.0
 	totalStops = (lastStop - firstStop) / stopGap
 
