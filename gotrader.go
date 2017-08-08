@@ -25,9 +25,9 @@ import (
 //
 
 var existingBuys, existingSells Orders
-var totalBuys, totalSells, currentPrice, firstStop, lastStop, stopGap, totalStops float64
+var totalBuys, totalSells, currentPrice, currentStop, firstStop, lastStop, stopGap, totalStops float64
 var stops []float64
-var btcIndex, usdIndex, ethIndex int
+var btcIndex, usdIndex, ethIndex, stopsIndex int
 var productId string
 
 var accounts []exchange.Account

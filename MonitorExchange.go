@@ -38,7 +38,8 @@ func MonitorExchange() {
 				GetOrders()
 				InitializeOrders()
 			} else {
-				currentPrice = message.Price
+				SetCurrentPrice(message.Price)
+				//currentPrice = message.Price
 			}
 
 			fmt.Printf("Current Price: $%f\n\n", currentPrice)
@@ -78,4 +79,20 @@ func MonitorExchange() {
 			}
 		}
 	}
+}
+
+func SetCurrentPrice(price float64) {
+
+	// Has the current price passed the next stop?
+	if stops[stopsIndex + 1] < price {
+
+		// 	Is there NOT a sell at current stop + 2?
+		if !Contains(PricesExisting(existingSells), stops[stopsIndex + 2]) {
+			println("\n\n** -- ** -- Buy Created! -- ** -- **\n\n")
+			CreateOrder("buy", stops[stopsIndex + 1], float64(int(((120.0/totalStops)/stops[stopsIndex + 1])*10000))/10000)
+			stopsIndex++
+		}
+	}
+
+	currentPrice = price
 }

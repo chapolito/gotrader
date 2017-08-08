@@ -15,7 +15,7 @@ func PrintCurrentState() {
 	totalBuys = TotalBuys()
 	fmt.Printf("Buys: %d\nCost: $%f\n\n", len(existingBuys), totalBuys)
 
-	// totalSells is similar to accounts[btcIndex].Hold, but it takes into consideration partially filled orders
+	// totalSells is similar to accounts[ethIndex].Hold, but it takes into consideration partially filled orders
 	totalSells = TotalSells()
 	fmt.Printf("Sells: %d\nCost: $%f\n\n", len(existingSells), totalSells)
 }

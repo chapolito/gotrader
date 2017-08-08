@@ -73,15 +73,14 @@ func GetOrders() error {
 func InitializeOrders() {
 
 	// Figure out how many stops are between the firstStop and currentPrice
-	var stopsUnderCurrentPrice int
 	for a := range stops {
 		if stops[a] <= currentPrice {
-			stopsUnderCurrentPrice = a + 1
+			stopsIndex = a + 1
 		}
 	}
 
 	// Match existing buys orders to stops. If no match create a buy order at that stop.
-	for a := 0; a < stopsUnderCurrentPrice; a++ {
+	for a := 0; a < stopsIndex; a++ {
 		if Contains(PricesExisting(existingBuys), stops[a]) {
 			fmt.Printf("Buy existing at: %f\n", stops[a])
 		} else {
@@ -95,7 +94,7 @@ func InitializeOrders() {
 	fmt.Printf("Current Price: %f\n", currentPrice)
 
 	// Print out existingSells at stops
-	for a := len(stops) - 1; a > stopsUnderCurrentPrice; a-- {
+	for a := len(stops) - 1; a > stopsIndex; a-- {
 		if Contains(PricesExisting(existingSells), stops[a]) {
 			fmt.Printf("Sell existing at: %f\n", stops[a])
 		}
