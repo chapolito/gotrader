@@ -18,15 +18,15 @@ import (
 //		b. if no, create a buy
 //
 // Websocket Monitoring
-//	1. If a sell happens create a buy at sell.Price-stopGap
-// 	2. If a buy happens, create a sell at buy.Price+stopGap
+//	1. If a sell happens create a buy at sell.Price-stepGap
+// 	2. If a buy happens, create a sell at buy.Price+stepGap
 //	3. If the price increases to a new high, keep buying
 //
 
 var existingBuys, existingSells Orders
-var totalBuys, totalSells, currentPrice, firstStop, lastStop, stopGap, totalStops float64
-var stops []float64
-var btcIndex, usdIndex, ethIndex, stopsIndex int
+var totalBuys, totalSells, currentPrice, firstStep, lastStep, stepGap, totalSteps float64
+var steps []float64
+var btcIndex, usdIndex, ethIndex, stepsIndex int
 var productId string
 
 var accounts []exchange.Account
@@ -37,13 +37,13 @@ func main() {
 	currentPrice = 0.0
 
 	productId = "ETH-USD"
-	firstStop = 139.0
-	lastStop = 339.0
-	stopGap = 5.0
-	totalStops = (lastStop - firstStop) / stopGap
+	firstStep = 139.0
+	lastStep = 339.0
+	stepGap = 5.0
+	totalSteps = (lastStep - firstStep) / stepGap
 
-	for i := firstStop; i <= lastStop; i += stopGap {
-		stops = append(stops, i)
+	for i := firstStep; i <= lastStep; i += stepGap {
+		steps = append(steps, i)
 	}
 
 	secret := os.Getenv("COINBASE_SECRET")

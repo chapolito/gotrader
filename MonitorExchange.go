@@ -53,8 +53,8 @@ func MonitorExchange() {
 						// compare message.Size == o.Size ...
 						// But is message.Size just the size of that match? (could be partial)
 
-						// create Sell at buy price plus stopGap
-						CreateOrder("sell", o.Price + stopGap, o.Size)
+						// create Sell at buy price plus stepGap
+						CreateOrder("sell", o.Price + stepGap, o.Size)
 						ResetOrders()
 						GetOrders()
 					}
@@ -69,8 +69,8 @@ func MonitorExchange() {
 						// compare message.Size == o.Size ...
 						// But is message.Size just the size of that match? (could be partial)
 
-						// create Buy at sell price minus stopGap
-						CreateOrder("buy", o.Price - stopGap, o.Size)
+						// create Buy at sell price minus stepGap
+						CreateOrder("buy", o.Price - stepGap, o.Size)
 						ResetOrders()
 						GetOrders()
 					}
@@ -82,14 +82,14 @@ func MonitorExchange() {
 
 func SetCurrentPrice(price float64) {
 
-	// Has the current price passed the next stop?
-	if stops[stopsIndex + 1] < price {
+	// Has the current price passed the next step?
+	if steps[stepsIndex + 1] < price {
 
-		// 	Is there NOT a sell at current stop + 2?
-		if !Contains(PricesExisting(existingSells), stops[stopsIndex + 2]) {
+		// 	Is there NOT a sell at current step + 2?
+		if !Contains(PricesExisting(existingSells), steps[stepsIndex + 2]) {
 			println("\n\n** -- ** -- Buy Created! -- ** -- **\n\n")
-			CreateOrder("buy", stops[stopsIndex + 1], float64(int(((120.0/totalStops)/stops[stopsIndex + 1])*10000))/10000)
-			stopsIndex++
+			CreateOrder("buy", steps[stepsIndex + 1], float64(int(((120.0/totalSteps)/steps[stepsIndex + 1])*10000))/10000)
+			stepsIndex++
 		}
 	}
 

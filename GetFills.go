@@ -52,7 +52,7 @@ package main
 // 						}
 // 					}
 //         case <- quit:
-//             ticker.Stop()
+//             ticker.Step()
 //             return
 //         }
 //     }

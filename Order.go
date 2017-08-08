@@ -68,31 +68,31 @@ func GetOrders() error {
 
 func InitializeOrders() {
 
-	// Figure out how many stops are between the firstStop and currentPrice
-	for a := range stops {
-		if stops[a] <= currentPrice {
-			stopsIndex = a + 1
+	// Figure out how many steps are between the firstStep and currentPrice
+	for a := range steps {
+		if steps[a] <= currentPrice {
+			stepsIndex = a + 1
 		}
 	}
 
-	// Match existing buys orders to stops. If no match create a buy order at that stop.
-	for a := 0; a < stopsIndex; a++ {
-		if Contains(PricesExisting(existingBuys), stops[a]) {
-			fmt.Printf("Buy existing at: %f\n", stops[a])
+	// Match existing buys orders to steps. If no match create a buy order at that step.
+	for a := 0; a < stepsIndex; a++ {
+		if Contains(PricesExisting(existingBuys), steps[a]) {
+			fmt.Printf("Buy existing at: %f\n", steps[a])
 		} else {
-			//CreateOrder("buy", stops[a], float64(int(((accounts[usdIndex].Balance / totalStops) / stops[a]) * 10000)) / 10000)
+			//CreateOrder("buy", steps[a], float64(int(((accounts[usdIndex].Balance / totalSteps) / steps[a]) * 10000)) / 10000)
 
 			// Minimium Buys (0.01 ETH) to test live
-			CreateOrder("buy", stops[a], float64(int(((120.0/totalStops)/stops[a])*10000))/10000)
+			CreateOrder("buy", steps[a], float64(int(((120.0/totalSteps)/steps[a])*10000))/10000)
 		}
 	}
 
 	fmt.Printf("Current Price: %f\n", currentPrice)
 
-	// Print out existingSells at stops
-	for a := len(stops) - 1; a > stopsIndex; a-- {
-		if Contains(PricesExisting(existingSells), stops[a]) {
-			fmt.Printf("Sell existing at: %f\n", stops[a])
+	// Print out existingSells at steps
+	for a := len(steps) - 1; a > stepsIndex; a-- {
+		if Contains(PricesExisting(existingSells), steps[a]) {
+			fmt.Printf("Sell existing at: %f\n", steps[a])
 		}
 	}
 
