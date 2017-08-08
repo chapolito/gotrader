@@ -17,10 +17,6 @@ type Orders []Order
 
 func CreateOrder(side string, price float64, size float64) error {
 
-	if side == "sell" {
-		price += stopGap
-	}
-
 	thisOrder := exchange.Order{
 		Price:     price,
 		Size:      size,

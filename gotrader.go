@@ -1,8 +1,6 @@
 package main
 
 import (
-	//"time"
-	//"fmt"
 	"os"
   exchange "github.com/preichenberger/go-coinbase-exchange"
 )
@@ -22,10 +20,11 @@ import (
 // Websocket Monitoring
 //	1. If a sell happens create a buy at sell.Price-stopGap
 // 	2. If a buy happens, create a sell at buy.Price+stopGap
+//	3. If the price increases to a new high, keep buying
 //
 
 var existingBuys, existingSells Orders
-var totalBuys, totalSells, currentPrice, currentStop, firstStop, lastStop, stopGap, totalStops float64
+var totalBuys, totalSells, currentPrice, firstStop, lastStop, stopGap, totalStops float64
 var stops []float64
 var btcIndex, usdIndex, ethIndex, stopsIndex int
 var productId string

@@ -39,7 +39,6 @@ func MonitorExchange() {
 				InitializeOrders()
 			} else {
 				SetCurrentPrice(message.Price)
-				//currentPrice = message.Price
 			}
 
 			fmt.Printf("Current Price: $%f\n\n", currentPrice)
@@ -55,7 +54,7 @@ func MonitorExchange() {
 						// But is message.Size just the size of that match? (could be partial)
 
 						// create Sell at buy price plus stopGap
-						CreateOrder("sell", o.Price+stopGap, o.Size)
+						CreateOrder("sell", o.Price + stopGap, o.Size)
 						ResetOrders()
 						GetOrders()
 					}
@@ -71,7 +70,7 @@ func MonitorExchange() {
 						// But is message.Size just the size of that match? (could be partial)
 
 						// create Buy at sell price minus stopGap
-						CreateOrder("buy", o.Price-stopGap, o.Size)
+						CreateOrder("buy", o.Price - stopGap, o.Size)
 						ResetOrders()
 						GetOrders()
 					}
