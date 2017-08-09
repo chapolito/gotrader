@@ -16,6 +16,7 @@ type Order struct {
 type Orders []Order
 
 func CreateOrder(side string, price float64, size float64) error {
+	println("\n\n** CreateOrder ** \n\n")
 
 	thisOrder := exchange.Order{
 		Price:     price,
@@ -98,7 +99,7 @@ func InitializeOrders() {
 
 func HowMuchToBuy(price float64) float64 {
 	return float64(int(((accounts[usdIndex].Balance / totalSteps) / price) * 10000)) / 10000
-	
+
 	// Minimium Buys (0.01 ETH) to test live
 	//return float64(int(((120.0/totalSteps)/price)*10000))/10000
 }
@@ -112,6 +113,7 @@ func PricesExisting(o Orders) []float64 {
 }
 
 func ResetOrders() {
+	println("\n\n** ResetOrders ** \n\n")
 	// Clear out previously recorded orders
 	existingSells = existingSells[:0]
 	existingBuys = existingBuys[:0]

@@ -55,6 +55,8 @@ func main() {
 
 	GetAccounts()
 
+	//CreateOrder("sell", 313.87, 0.01)
+
 	MonitorExchange()
 
 }
