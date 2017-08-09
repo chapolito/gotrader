@@ -80,10 +80,7 @@ func InitializeOrders() {
 		if Contains(PricesExisting(existingBuys), steps[a]) {
 			fmt.Printf("Buy existing at: %f\n", steps[a])
 		} else {
-			//CreateOrder("buy", steps[a], float64(int(((accounts[usdIndex].Balance / totalSteps) / steps[a]) * 10000)) / 10000)
-
-			// Minimium Buys (0.01 ETH) to test live
-			CreateOrder("buy", steps[a], float64(int(((120.0/totalSteps)/steps[a])*10000))/10000)
+			CreateOrder("buy", steps[a], HowMuchToBuy(steps[a]))
 		}
 	}
 
@@ -97,6 +94,13 @@ func InitializeOrders() {
 	}
 
 	PrintCurrentState()
+}
+
+func HowMuchToBuy(price float64) float64 {
+	return float64(int(((accounts[usdIndex].Balance / totalSteps) / price) * 10000)) / 10000
+	
+	// Minimium Buys (0.01 ETH) to test live
+	//return float64(int(((120.0/totalSteps)/price)*10000))/10000
 }
 
 func PricesExisting(o Orders) []float64 {

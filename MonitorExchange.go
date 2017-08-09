@@ -88,7 +88,7 @@ func SetCurrentPrice(price float64) {
 		// 	Is there NOT a sell at current step + 2?
 		if !Contains(PricesExisting(existingSells), steps[stepsIndex + 2]) {
 			println("\n\n** -- ** -- Buy Created! -- ** -- **\n\n")
-			CreateOrder("buy", steps[stepsIndex + 1], float64(int(((120.0/totalSteps)/steps[stepsIndex + 1])*10000))/10000)
+			CreateOrder("buy", steps[stepsIndex + 1], HowMuchToBuy(steps[stepsIndex + 1]))
 			stepsIndex++
 		}
 	}

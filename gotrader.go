@@ -37,9 +37,9 @@ func main() {
 	currentPrice = 0.0
 
 	productId = "ETH-USD"
-	firstStep = 139.0
-	lastStep = 339.0
-	stepGap = 5.0
+	firstStep = 179.0
+	lastStep = 379.0
+	stepGap = 2.50
 	totalSteps = (lastStep - firstStep) / stepGap
 
 	for i := firstStep; i <= lastStep; i += stepGap {
