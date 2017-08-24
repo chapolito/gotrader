@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	ws "github.com/gorilla/websocket"
 	exchange "github.com/preichenberger/go-coinbase-exchange"
@@ -35,13 +36,14 @@ func MonitorExchange() {
 
 			if currentPrice == 0.0 {
 				currentPrice = message.Price
+				// fmt.Printf("Current Price: $%f\n\n", currentPrice)
 				GetOrders()
 				InitializeOrders()
 			} else {
 				SetCurrentPrice(message.Price)
 			}
 
-			fmt.Printf("Current Price: $%f\n\n", currentPrice)
+
 
 			if message.Side == "buy" {
 				// run through existing buys and see if this match aligns with any
@@ -82,9 +84,10 @@ func MonitorExchange() {
 
 func SetCurrentPrice(price float64) {
 	// Has the current price passed the next step?
-	fmt.Printf("is %f less than %f?", steps[stepsIndex], price)
+	t := time.Now()
+	fmt.Printf("%s ||| next step: %f ||| current price: %f\n", t.Format(time.Kitchen), steps[stepsIndex], price)
 	if steps[stepsIndex] < price {
-		fmt.Printf("!!!!!!! ---- %f is less than %f!!!!!!!", steps[stepsIndex], price)
+		// fmt.Printf("\n!!!!!!! ---- %f is less than %f!!!!!!!\n", steps[stepsIndex], price)
 		// 	Is there NOT a sell at current step + 1?
 		if !Contains(PricesExisting(existingSells), steps[stepsIndex + 1]) {
 			println("\n\n** -- ** -- Buy Created! -- ** -- **\n\n")

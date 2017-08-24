@@ -51,11 +51,8 @@ func main() {
 	passphrase := os.Getenv("COINBASE_PASSPHRASE")
 
 	client = exchange.NewClient(secret, key, passphrase)
-	// client = exchange.NewTestClient()
 
 	GetAccounts()
-
-	//CreateOrder("sell", 313.87, 0.01)
 
 	MonitorExchange()
 
