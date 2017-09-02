@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"strconv"
   exchange "github.com/preichenberger/go-coinbase-exchange"
 )
 
@@ -37,9 +38,18 @@ func main() {
 	currentPrice = 0.0
 
 	productId = "ETH-USD"
-	firstStep = 179.0
-	lastStep = 379.0
-	stepGap = 2.50
+	// firstStep = 239.0
+	// lastStep = 439.0
+	// stepGap = 5.00
+	var firstStepErr, lastStepErr, stepGapErr error
+
+	firstStep, firstStepErr = strconv.ParseFloat(os.Getenv("FIRST_STEP"), 64)
+	lastStep, lastStepErr = strconv.ParseFloat(os.Getenv("LAST_STEP"), 64)
+	stepGap, stepGapErr = strconv.ParseFloat(os.Getenv("STEP_GAP"), 64)
+
+	if firstStepErr != nil || lastStepErr != nil || stepGapErr != nil {
+  println("ERROR parsing env variables as floats.\n")
+}
 	totalSteps = (lastStep - firstStep) / stepGap
 
 	for i := firstStep; i <= lastStep; i += stepGap {
