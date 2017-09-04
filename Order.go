@@ -36,9 +36,9 @@ func CreateOrder(side string, price float64, size float64) error {
 
 		// Update Lists of Buys / Sells
 		if side == "sell" {
-			existingSells = append(existingSells, Order{"sell", savedOrder.Id, savedOrder.Size, savedOrder.Price})
+			existingSells = append(existingSells, Order{"sell", savedOrder.Id, savedOrder.Price, savedOrder.Size})
 		} else if side == "buy" {
-			existingBuys = append(existingBuys, Order{"buy", savedOrder.Id, savedOrder.Size, savedOrder.Price})
+			existingBuys = append(existingBuys, Order{"buy", savedOrder.Id, savedOrder.Price, savedOrder.Size})
 		}
 
 		return nil
