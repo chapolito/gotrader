@@ -33,15 +33,16 @@ func CreateOrder(side string, price float64, size float64) error {
 		return err
 	} else {
 		fmt.Printf("%s order created for %f at $%f\n", savedOrder.Side, savedOrder.Size, savedOrder.Price)
-	}
 
-	if side == "sell" {
-		existingSells = append(existingSells, Order{"sell", savedOrder.Id, savedOrder.Size, savedOrder.Price})
-	} else if side == "buy" {
-		existingBuys = append(existingBuys, Order{"buy", savedOrder.Id, savedOrder.Size, savedOrder.Price})
-	}
+		// Update Lists of Buys / Sells
+		if side == "sell" {
+			existingSells = append(existingSells, Order{"sell", savedOrder.Id, savedOrder.Size, savedOrder.Price})
+		} else if side == "buy" {
+			existingBuys = append(existingBuys, Order{"buy", savedOrder.Id, savedOrder.Size, savedOrder.Price})
+		}
 
-	return nil
+		return nil
+	}
 }
 
 // Get all Orders

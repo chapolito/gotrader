@@ -46,7 +46,7 @@ func MonitorExchange() {
 
 
 			if message.Side == "buy" {
-				// run through existing buys and see if this match aligns with any
+				// Run through existing buys and see if this match aligns with any
 				for _, o := range existingBuys {
 					if message.MakerOrderId == o.Id {
 						println("\n\n** -- ** -- Buy Happened! -- ** -- **\n\n")
@@ -55,14 +55,14 @@ func MonitorExchange() {
 						// compare message.Size == o.Size ...
 						// But is message.Size just the size of that match? (could be partial)
 
-						// create Sell at buy price plus stepGap
+						// Create Sell at buy price plus stepGap
 						CreateOrder("sell", o.Price + stepGap, o.Size)
 						ResetOrders()
 						GetOrders()
 					}
 				}
 			} else if message.Side == "sell" {
-				// run through my existing sells and see if this match aligns with any
+				// Run through my existing sells and see if this match aligns with any
 				for _, o := range existingSells {
 					if message.MakerOrderId == o.Id {
 						println("\n\n** -- ** -- Sell Happened! -- ** -- **\n\n")
