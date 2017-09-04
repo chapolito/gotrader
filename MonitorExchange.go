@@ -83,14 +83,16 @@ func MonitorExchange() {
 }
 
 func SetCurrentPrice(price float64) {
-	// Has the current price passed the next step?
+
 	t := time.Now()
 	fmt.Printf("%s ||| next step: %f ||| current price: %f\n", t.Format(time.Kitchen), steps[stepsIndex], price)
+
+	// Has the current price surpassed the next step?
 	if steps[stepsIndex] < price {
-		// fmt.Printf("\n!!!!!!! ---- %f is less than %f!!!!!!!\n", steps[stepsIndex], price)
-		// 	Is there NOT a sell at current step + 1?
-		if !Contains(PricesExisting(existingSells), steps[stepsIndex + 1]) {
-			println("\n\n** -- ** -- Buy Created! -- ** -- **\n\n")
+
+		// 	Is there NOT a sell at current step + 1 AND is there NOT a buy at current step?
+		if !Contains(PricesExisting(existingSells), steps[stepsIndex + 1]) && !Contains(PricesExisting(existingBuys), steps[stepsIndex]) {
+			println("\n\n** -- ** -- Buy needs to be created! -- ** -- **\n\n")
 			CreateOrder("buy", steps[stepsIndex], HowMuchToBuy(steps[stepsIndex]))
 		}
 		stepsIndex++
