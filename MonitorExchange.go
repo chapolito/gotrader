@@ -43,38 +43,38 @@ func MonitorExchange() {
 				SetCurrentPrice(message.Price)
 			}
 
-
-
 			if message.Side == "buy" {
 				// Run through existing buys and see if this match aligns with any
 				for _, o := range existingBuys {
 					if message.MakerOrderId == o.Id {
 						println("\n\n** -- ** -- Buy Happened! -- ** -- **\n\n")
 
-						// Check if this match is the complete order?
-						// compare message.Size == o.Size ...
-						// But is message.Size just the size of that match? (could be partial)
-
-						// Create Sell at buy price plus stepGap
-						CreateOrder("sell", o.Price + stepGap, o.Size)
-						ResetOrders()
-						GetOrders()
+						// Is this match a complete order?
+						if message.RemainingSize != 0.0 {
+							fmt.Printf("INCOMPLETE ORDER: only %f of %f filled", message.RemainingSize, o.Size)
+						} else {
+							// Create Sell at buy price plus stepGap
+							CreateOrder("sell", o.Price + stepGap, o.Size)
+							ResetOrders()
+							GetOrders()
+						}
 					}
 				}
 			} else if message.Side == "sell" {
-				// Run through my existing sells and see if this match aligns with any
+				// Run through existing sells and see if this match aligns with any
 				for _, o := range existingSells {
 					if message.MakerOrderId == o.Id {
 						println("\n\n** -- ** -- Sell Happened! -- ** -- **\n\n")
 
-						// Check if this match is the complete order?
-						// compare message.Size == o.Size ...
-						// But is message.Size just the size of that match? (could be partial)
-
-						// create Buy at sell price minus stepGap
-						CreateOrder("buy", o.Price - stepGap, o.Size)
-						ResetOrders()
-						GetOrders()
+						// Is this match a complete order?
+						if message.RemainingSize != 0.0 {
+							fmt.Printf("INCOMPLETE ORDER: only %f of %f filled\n\n", message.RemainingSize, o.Size)
+						} else {
+							// Create buy order at sell price minus stepGap
+							CreateOrder("buy", o.Price - stepGap, o.Size)
+							ResetOrders()
+							GetOrders()
+						}
 					}
 				}
 			}

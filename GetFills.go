@@ -1,5 +1,27 @@
 package main
 
+//
+// *~*~*~*~*~*~*~*~*~**~*~*~*~*~*~*~*~*
+// Get Fills
+// *~*~*~*~*~*~*~*~*~**~*~*~*~*~*~*~*~*
+//
+// Demonstrates profit and rate of profit
+//
+//  1. Display total assets:
+//
+//    - Net assets in USD:
+//      usdIndex +
+//      ethIndex * eth4usdExchangeRate + (in theory, this amount would be zero, the program should never hold ETH)
+//      existingBuys +
+//      existingSells
+//
+//  2. Calculate Profit for last week
+//    - Only count sells that have a price in totalSteps
+//      This will allow to run multiple tests on the same account
+//    - profit for each sell: (Price * Size) - ((Price - stepGap) * Size)
+//
+//
+
 // import (
 // 	"time"
 // 	"fmt"
