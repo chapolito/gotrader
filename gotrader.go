@@ -18,11 +18,7 @@ import (
 // 		a. if yes do nothing
 //		b. if no, create a buy
 //
-// Websocket Monitoring
-//	1. If a sell happens create a buy at sell.Price-stepGap
-// 	2. If a buy happens, create a sell at buy.Price+stepGap
-//	3. If the price increases to a new high, keep buying
-//
+
 
 var existingBuys, existingSells Orders
 var totalBuys, totalSells, currentPrice, firstStep, lastStep, stepGap, totalSteps float64
@@ -38,7 +34,7 @@ func main() {
 	currentPrice = 0.0
 
 	productId = "ETH-USD"
-	
+
 	var firstStepErr, lastStepErr, stepGapErr error
 
 	firstStep, firstStepErr = strconv.ParseFloat(os.Getenv("FIRST_STEP"), 64)

@@ -79,11 +79,18 @@ func InitializeOrders() {
 		}
 	}
 
+	// 1. Cancel existing buy orders
+	// 2. Recreate all cancelled buys using HowMuchToBuy
+	//
+
 	// Match existing buys orders to steps. If no match create a buy order at that step.
+	//
+	// NOTE stepsIndex always points to the next higher step
+
 	for a := 0; a < stepsIndex; a++ {
 		if Contains(PricesExisting(existingBuys), steps[a]) {
 			fmt.Printf("Buy existing at: %f\n", steps[a])
-		} else {
+		} else if !Contains(PricesExisting(existingSells), steps[a + 1]) {
 			CreateOrder("buy", steps[a], HowMuchToBuy(steps[a]))
 		}
 	}
@@ -91,7 +98,7 @@ func InitializeOrders() {
 	fmt.Printf("Current Price: %f\n", currentPrice)
 
 	// Print out existingSells at steps
-	for a := len(steps) - 1; a > stepsIndex; a-- {
+	for a := len(steps) - 1; a >= stepsIndex; a-- {
 		if Contains(PricesExisting(existingSells), steps[a]) {
 			fmt.Printf("Sell existing at: %f\n", steps[a])
 		}
@@ -102,7 +109,7 @@ func InitializeOrders() {
 
 func HowMuchToBuy(price float64) float64 {
 	// Minimium Buys are 0.01 ETH
-	return float64(int(((accounts[usdIndex].Balance / totalSteps) / price) * 10000)) / 10000
+	return float64(int(((accounts[usdIndex].Balance / (totalSteps - float64(len(existingSells)))) / price) * 10000)) / 10000
 }
 
 func PricesExisting(o Orders) []float64 {

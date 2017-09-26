@@ -8,6 +8,11 @@ import (
 	exchange "github.com/preichenberger/go-coinbase-exchange"
 )
 
+// Websocket Monitoring
+//	1. If a sell happens create a buy at sell.Price-stepGap
+// 	2. If a buy happens, create a sell at buy.Price+stepGap
+//	3. If the price increases to a new high, keep buying
+
 func MonitorExchange() {
 	// Websocket
 	var wsDialer ws.Dialer
@@ -36,7 +41,6 @@ func MonitorExchange() {
 
 			if currentPrice == 0.0 {
 				currentPrice = message.Price
-				// fmt.Printf("Current Price: $%f\n\n", currentPrice)
 				GetOrders()
 				InitializeOrders()
 			} else {
