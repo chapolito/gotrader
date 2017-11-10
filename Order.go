@@ -45,6 +45,19 @@ func CreateOrder(side string, price float64, size float64) error {
 	}
 }
 
+func CancelOrder(id string) error {
+	fmt.Printf("\n\n** CancelOrder **\n\n")
+
+	err := client.CancelOrder(id)
+
+	if err != nil {
+		fmt.Printf("error: %v\n", err)
+		return err
+	} else {
+		return nil
+	}
+}
+
 // Get all Orders
 func GetOrders() error {
 	println("\n\n** GetOrders ** \n\n")
@@ -79,14 +92,19 @@ func InitializeOrders() {
 		}
 	}
 
-	// 1. Cancel existing buy orders
-	// 2. Recreate all cancelled buys using HowMuchToBuy
-	//
+	// Loop through existing orders, cancel them, then recreate them
+	// This ensures any profits get pulled in so they start compounding.
+	for _, o := range existingBuys {
+		CancelOrder(o.Id)
+		CreateOrder("buy", o.Price, HowMuchToBuy(o.Price))
+	}
+
+	ResetOrders()
+	GetOrders()
 
 	// Match existing buys orders to steps. If no match create a buy order at that step.
 	//
 	// NOTE stepsIndex always points to the next higher step
-
 	for a := 0; a < stepsIndex; a++ {
 		if Contains(PricesExisting(existingBuys), steps[a]) {
 			fmt.Printf("Buy existing at: %f\n", steps[a])
@@ -106,6 +124,11 @@ func InitializeOrders() {
 
 	PrintCurrentState()
 }
+
+// func RemoveBuyOrder(id string)  {
+// 	for _, o := range existingBuys {
+// 		if Contains
+// }
 
 func HowMuchToBuy(price float64) float64 {
 	// Minimium Buys are 0.01 ETH

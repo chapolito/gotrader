@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"strconv"
+
   exchange "github.com/preichenberger/go-coinbase-exchange"
 )
 

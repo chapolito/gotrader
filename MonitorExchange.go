@@ -14,6 +14,7 @@ import (
 //	3. If the price increases to a new high, keep buying
 
 func MonitorExchange() {
+	fmt.Printf("\n\n** MonitorExchange **\n\n")
 	// Websocket
 	var wsDialer ws.Dialer
 	wsConn, _, err := wsDialer.Dial("wss://ws-feed.gdax.com", nil)

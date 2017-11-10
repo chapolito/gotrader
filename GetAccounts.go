@@ -1,7 +1,13 @@
 package main
 
+import (
+	"fmt"
+)
+
 // Get Accounts
 func GetAccounts() {
+	fmt.Printf("\n\n** GetAccounts **\n\n")
+
 	var err error
 	accounts, err = client.GetAccounts()
 	if err != nil {
