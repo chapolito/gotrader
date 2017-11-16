@@ -56,7 +56,7 @@ func MonitorExchange() {
 
 						// Is this match a complete order?
 						if message.RemainingSize != 0.0 {
-							fmt.Printf("INCOMPLETE ORDER: only %f of %f filled", message.RemainingSize, o.Size)
+							fmt.Printf("INCOMPLETE ORDER: only %f of %f filled\n\n", message.RemainingSize, o.Size)
 						} else {
 							// Create Sell at buy price plus stepGap
 							CreateOrder("sell", o.Price + stepGap, o.Size)

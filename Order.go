@@ -125,14 +125,10 @@ func InitializeOrders() {
 	PrintCurrentState()
 }
 
-// func RemoveBuyOrder(id string)  {
-// 	for _, o := range existingBuys {
-// 		if Contains
-// }
-
 func HowMuchToBuy(price float64) float64 {
-	// Minimium Buys are 0.01 ETH
-	return float64(int(((accounts[usdIndex].Balance / (totalSteps - float64(len(existingSells)))) / price) * 10000)) / 10000
+	// Minimium Buys are 0.01 ETH/LTC/BTC
+	// Dividing by 2 to split between ETH and LTC
+	return float64(int(((accounts[usdIndex].Balance / (totalSteps - float64(len(existingSells)))) / price) * 10000)) / 10000 / 2
 }
 
 func PricesExisting(o Orders) []float64 {
