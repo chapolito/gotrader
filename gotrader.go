@@ -35,26 +35,15 @@ func main() {
 
 	currentPrice = 0.0
 
-
-	// firstStep = 179.0
-	// lastStep = 399.0
-	// stepGap = 5.0
-
-	// min buy is .01 ETH
-	// in order for stepGapSmall to be 1.0, we need $900 dedicated to it
-	//
-	// stepGapSmall = 2.0
-	// stepGapMedium = 8.0
-	// stepGapLarge = 16.0
+	productId = os.Getenv("PRODUCT_ID")
 
 	var firstStepErr, lastStepErr, stepGapErr error
-
 	firstStep, firstStepErr = strconv.ParseFloat(os.Getenv("FIRST_STEP"), 64)
 	lastStep, lastStepErr = strconv.ParseFloat(os.Getenv("LAST_STEP"), 64)
 	stepGap, stepGapErr = strconv.ParseFloat(os.Getenv("STEP_GAP"), 64)
 
 	if firstStepErr != nil || lastStepErr != nil || stepGapErr != nil {
-	  println("ERROR parsing env variables as floats.\n")
+	  println("ERROR parsing env vars as floats.\n")
 	}
 
 	totalSteps = (lastStep - firstStep) / stepGap
@@ -63,15 +52,9 @@ func main() {
 		steps = append(steps, i)
 	}
 
-	// productId = "ETH-USD"
-
-	productId = os.Getenv("PRODUCT_ID")
-	fmt.Printf("ProductId: %v", productId)
-
 	secret := os.Getenv("COINBASE_SECRET")
 	key := os.Getenv("COINBASE_KEY")
 	passphrase := os.Getenv("COINBASE_PASSPHRASE")
-
 	client = exchange.NewClient(secret, key, passphrase)
 
 	GetAccounts()
