@@ -25,5 +25,8 @@ func GetAccounts() {
 		if a.Currency == "ETH" {
 			ethIndex = i
 		}
+		if a.Currency == "LTC" {
+			ltcIndex = i
+		}
 	}
 }

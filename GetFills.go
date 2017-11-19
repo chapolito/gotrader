@@ -11,7 +11,7 @@ package main
 //
 //    - Net assets in USD:
 //      usdIndex +
-//      ethIndex * eth4usdExchangeRate + (in theory, this amount would be zero, the program should never hold ETH)
+//      ethIndex * eth4usdExchangeRate + (This amount should be 0.1 ETH always, the reserve that it keeps)
 //      existingBuys +
 //      existingSells
 //

@@ -16,7 +16,7 @@ type Order struct {
 type Orders []Order
 
 func CreateOrder(side string, price float64, size float64) error {
-	fmt.Printf("\n\n** CreateOrder **\n\n")
+	fmt.Printf("\n\n** CreateOrder **\n")
 
 	thisOrder := exchange.Order{
 		Price:     price,
@@ -32,7 +32,7 @@ func CreateOrder(side string, price float64, size float64) error {
 		fmt.Printf("error: %v\n", err)
 		return err
 	} else {
-		fmt.Printf("%s order created for %f at $%f\n", savedOrder.Side, savedOrder.Size, savedOrder.Price)
+		fmt.Printf("%s order created for %f at $%f", savedOrder.Side, savedOrder.Size, savedOrder.Price)
 
 		// Update Lists of Buys / Sells
 		if side == "sell" {
@@ -46,7 +46,7 @@ func CreateOrder(side string, price float64, size float64) error {
 }
 
 func CancelOrder(id string) error {
-	fmt.Printf("\n\n** CancelOrder **\n\n")
+	fmt.Printf("\n** CancelOrder **\n\n")
 
 	err := client.CancelOrder(id)
 
@@ -84,13 +84,6 @@ func GetOrders() error {
 }
 
 func InitializeOrders() {
-
-	// Figure out how many steps are between the firstStep and currentPrice
-	for a := range steps {
-		if steps[a] <= currentPrice {
-			stepsIndex = a + 1
-		}
-	}
 
 	// Loop through existing orders, cancel them, then recreate them
 	// This ensures any profits get pulled in so they start compounding.

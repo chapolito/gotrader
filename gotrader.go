@@ -3,7 +3,6 @@ package main
 import (
 	"os"
 	"strconv"
-	"fmt"
 
   exchange "github.com/preichenberger/go-coinbase-exchange"
 )
@@ -22,10 +21,10 @@ import (
 //
 
 var existingBuys, existingSells Orders
-var totalBuys, totalSells, currentPrice, firstStep, lastStep, stepGap, totalSteps float64
+var totalBuys, totalSells, currentPrice, firstStep, lastStep, stepGap, totalSteps, holdSteps float64
 
 var steps []float64
-var btcIndex, usdIndex, ethIndex, stepsIndex int
+var btcIndex, usdIndex, ethIndex, ltcIndex, stepsIndex int
 var productId string
 
 var accounts []exchange.Account
@@ -34,23 +33,23 @@ var client *exchange.Client
 func main() {
 
 	currentPrice = 0.0
+	holdSteps = 14.0
 
 	productId = os.Getenv("PRODUCT_ID")
 
-	var firstStepErr, lastStepErr, stepGapErr error
-	firstStep, firstStepErr = strconv.ParseFloat(os.Getenv("FIRST_STEP"), 64)
-	lastStep, lastStepErr = strconv.ParseFloat(os.Getenv("LAST_STEP"), 64)
+	var stepGapErr error
+	// var firstStepErr, lastStepErr, stepGapErr error
+	// firstStep, firstStepErr = strconv.ParseFloat(os.Getenv("FIRST_STEP"), 64)
+	// lastStep, lastStepErr = strconv.ParseFloat(os.Getenv("LAST_STEP"), 64)
 	stepGap, stepGapErr = strconv.ParseFloat(os.Getenv("STEP_GAP"), 64)
 
-	if firstStepErr != nil || lastStepErr != nil || stepGapErr != nil {
+	if stepGapErr != nil {
 	  println("ERROR parsing env vars as floats.\n")
 	}
 
-	totalSteps = (lastStep - firstStep) / stepGap
-
-	for i := firstStep; i <= lastStep; i += stepGap {
-		steps = append(steps, i)
-	}
+	// if firstStepErr != nil || lastStepErr != nil || stepGapErr != nil {
+	//   println("ERROR parsing env vars as floats.\n")
+	// }
 
 	secret := os.Getenv("COINBASE_SECRET")
 	key := os.Getenv("COINBASE_KEY")
