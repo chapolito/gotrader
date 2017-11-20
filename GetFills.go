@@ -14,6 +14,15 @@ import (
 // Demonstrates profit and rate of profit
 //
 
+func CalculateProfit() {
+  GetFills()
+  GetStats()
+
+  profit = filledSellsTotal - FilledBuysTotal + accounts[thisCoinAccountIndex].Balance * twentyFourHourAverage
+
+  fmt.Printf("Total %s Profit: $%f\n\n", productId, profit)
+}
+
 func GetStats() {
   stats, err := client.GetStats(productId)
 	if err != nil {
@@ -30,8 +39,6 @@ func GetStats() {
 
 func GetFills() {
 
-  var sellsTotal, buysTotal float64
-
 	var fills []exchange.Fill
 	cursorFills := client.ListFills()
 
@@ -42,18 +49,12 @@ func GetFills() {
       for _, f := range fills {
         if f.ProductId == productId {
           if f.Side == "buy" {
-            buysTotal += f.Size * f.Price
+            FilledBuysTotal += f.Size * f.Price
           } else if f.Side == "sell" {
-            sellsTotal += f.Size * f.Price
+            filledSellsTotal += f.Size * f.Price
           }
         }
       }
     }
   }
-
-  GetStats()
-
-  profit = sellsTotal - buysTotal + accounts[ltcIndex].Balance * twentyFourHourAverage
-
-  fmt.Printf("Total %s Profit: $%f\n\n", productId, profit)
 }

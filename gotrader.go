@@ -21,10 +21,10 @@ import (
 //
 
 var existingBuys, existingSells Orders
-var totalBuys, totalSells, currentPrice, firstStep, lastStep, stepGap, totalSteps, holdSteps, twentyFourHourHigh, twentyFourHourLow, twentyFourHourAverage, profit float64
+var totalBuys, totalSells, currentPrice, firstStep, lastStep, stepGap, totalSteps, holdSteps, twentyFourHourHigh, twentyFourHourLow, twentyFourHourAverage, profit, filledSellsTotal, FilledBuysTotal float64
 
 var steps []float64
-var btcIndex, usdIndex, ethIndex, ltcIndex, stepsIndex int
+var btcIndex, usdIndex, ethIndex, ltcIndex, thisCoinAccountIndex, stepsIndex int
 var productId string
 
 var accounts []exchange.Account
@@ -38,18 +38,11 @@ func main() {
 	productId = os.Getenv("PRODUCT_ID")
 
 	var stepGapErr error
-	// var firstStepErr, lastStepErr, stepGapErr error
-	// firstStep, firstStepErr = strconv.ParseFloat(os.Getenv("FIRST_STEP"), 64)
-	// lastStep, lastStepErr = strconv.ParseFloat(os.Getenv("LAST_STEP"), 64)
 	stepGap, stepGapErr = strconv.ParseFloat(os.Getenv("STEP_GAP"), 64)
 
 	if stepGapErr != nil {
 	  println("ERROR parsing env vars as floats.\n")
 	}
-
-	// if firstStepErr != nil || lastStepErr != nil || stepGapErr != nil {
-	//   println("ERROR parsing env vars as floats.\n")
-	// }
 
 	secret := os.Getenv("COINBASE_SECRET")
 	key := os.Getenv("COINBASE_KEY")
@@ -57,8 +50,6 @@ func main() {
 	client = exchange.NewClient(secret, key, passphrase)
 
 	GetAccounts()
-	GetFills()
-
+	CalculateProfit()
 	MonitorExchange()
-
 }
