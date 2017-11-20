@@ -56,6 +56,8 @@ func main() {
 	passphrase := os.Getenv("COINBASE_PASSPHRASE")
 	client = exchange.NewClient(secret, key, passphrase)
 
+	GetFills()
+
 	GetAccounts()
 
 	MonitorExchange()
