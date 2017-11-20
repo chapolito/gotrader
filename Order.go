@@ -60,6 +60,9 @@ func CancelOrder(id string) error {
 
 // Get all Orders
 func GetOrders() error {
+	CleanseOrders()
+	ResetOrders()
+
 	println("\n\n** GetOrders ** \n\n")
 	var rawOrders []exchange.Order
 
@@ -75,6 +78,7 @@ func GetOrders() error {
 					existingSells = append(existingSells, Order{"sell", o.Id, o.Price, o.Size})
 				} else if o.Side == "buy" {
 					existingBuys = append(existingBuys, Order{"buy", o.Id, o.Price, o.Size})
+					// Should I cleanse Orders here?
 				}
 			}
 		}
@@ -85,18 +89,9 @@ func GetOrders() error {
 
 func InitializeOrders() {
 
-	// Loop through existing orders, cancel them, then recreate them
-	// This ensures any profits get pulled in so they start compounding.
-	for _, o := range existingBuys {
-		CancelOrder(o.Id)
-		CreateOrder("buy", o.Price, HowMuchToBuy(o.Price))
-	}
-
-	ResetOrders()
 	GetOrders()
 
 	// Match existing buys orders to steps. If no match create a buy order at that step.
-	//
 	// NOTE stepsIndex always points to the next higher step
 	for a := 0; a < stepsIndex; a++ {
 		if Contains(PricesExisting(existingBuys), steps[a]) {
@@ -115,7 +110,24 @@ func InitializeOrders() {
 		}
 	}
 
+	GetOrders()
+
 	PrintCurrentState()
+}
+
+func CleanseOrders() {
+	// Loop through existing orders, cancel them, then recreate them if still needed
+	// Recreating ensures any profits get pulled in to start compounding.
+	for _, o := range existingBuys {
+		CancelOrder(o.Id)
+
+		// Loop through steps, check if price is still within steps[], if it is, recreate
+		for _, s := range steps {
+			if o.Price == s {
+				CreateOrder("buy", o.Price, HowMuchToBuy(o.Price))
+			}
+		}
+	}
 }
 
 func HowMuchToBuy(price float64) float64 {
@@ -133,7 +145,6 @@ func PricesExisting(o Orders) []float64 {
 }
 
 func ResetOrders() {
-	println("\n\n** ResetOrders **\n\n")
 	// Clear out previously recorded orders
 	existingSells = existingSells[:0]
 	existingBuys = existingBuys[:0]

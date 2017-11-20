@@ -54,7 +54,6 @@ func MonitorExchange() {
 						} else {
 							// Create Sell at buy price plus stepGap
 							CreateOrder("sell", o.Price + stepGap, o.Size)
-							ResetOrders()
 							GetOrders()
 						}
 					}
@@ -71,7 +70,6 @@ func MonitorExchange() {
 						} else {
 							// Create buy order at sell price minus stepGap
 							CreateOrder("buy", o.Price - stepGap, o.Size)
-							ResetOrders()
 							GetOrders()
 						}
 					}
@@ -87,7 +85,6 @@ func SetCurrentPrice(price float64) {
 	if currentPrice == 0.0 {
 		currentPrice = price
 		CreateSteps()
-		GetOrders()
 		InitializeOrders()
 
 	} else {
@@ -102,9 +99,13 @@ func SetCurrentPrice(price float64) {
 				println("\n\n** -- ** -- Buy needs to be created! -- ** -- **\n\n")
 				CreateOrder("buy", steps[stepsIndex], HowMuchToBuy(steps[stepsIndex]))
 			}
-			stepsIndex++
+			//stepsIndex++
+			CreateSteps()
+
+		// Has the current price dipped below the next lowest step?
 		} else if steps[stepsIndex - 1] > price {
-			stepsIndex--
+			//stepsIndex--
+			CreateSteps()
 		}
 
 		currentPrice = price
@@ -122,7 +123,10 @@ func CreateSteps()  {
 	// Should also be (holdSteps * 2) + 1
 	totalSteps = (lastStep - firstStep) / stepGap
 
-	//
+	// Reset steps
+	steps = steps[:0]
+	
+	// Create steps
 	for i := firstStep; i <= lastStep; i += stepGap {
 		steps = append(steps, i)
 	}
