@@ -21,7 +21,7 @@ import (
 //
 
 var existingBuys, existingSells Orders
-var totalBuys, totalSells, currentPrice, firstStep, lastStep, stepGap, totalSteps, holdSteps float64
+var totalBuys, totalSells, currentPrice, firstStep, lastStep, stepGap, totalSteps, holdSteps, twentyFourHourHigh, twentyFourHourLow, twentyFourHourAverage, profit float64
 
 var steps []float64
 var btcIndex, usdIndex, ethIndex, ltcIndex, stepsIndex int
@@ -56,9 +56,8 @@ func main() {
 	passphrase := os.Getenv("COINBASE_PASSPHRASE")
 	client = exchange.NewClient(secret, key, passphrase)
 
-	GetFills()
-
 	GetAccounts()
+	GetFills()
 
 	MonitorExchange()
 

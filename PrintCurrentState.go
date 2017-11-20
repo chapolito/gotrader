@@ -12,12 +12,6 @@ func PrintCurrentState() {
 	fmt.Printf("ETH - Balance: $%f, Hold: $%f, Available: $%f\n\n", accounts[ethIndex].Balance, accounts[ethIndex].Hold, accounts[ethIndex].Available)
 	fmt.Printf("LTC - Balance: $%f, Hold: $%f, Available: $%f\n\n", accounts[ltcIndex].Balance, accounts[ltcIndex].Hold, accounts[ltcIndex].Available)
 
-	stats, err := client.GetStats(productId)
-	if err != nil {
-		println(err.Error())
-	}
-	fmt.Printf("%s 24H || High: %f || Low: %f || Open: %f", productId, stats.High, stats.Low, stats.Open)
-
 	// How to get current price for each currency?
 	//fmt.Printf("Total worth in USD: %f\n\n", accounts[usdIndex].Balance + accounts[ethIndex].Balance * currentPriceETH + accounts[ltcIndex].Balance * currentPriceLTC)
 
