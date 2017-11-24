@@ -95,11 +95,11 @@ func InitializeOrders() {
 
 	fmt.Printf("\n** InitializeOrders **\n")
 
-	// Run GetOrders to set existingBuys and existingSells
+	// Set existingBuys and existingSells
 	GetOrders()
 
 	// Prune orders out of existingBuys
-	PruneOrders()
+	PruneBuys()
 
 	// Create any missing buys that there are steps for
 	CreateMissingBuys()
@@ -113,8 +113,8 @@ func InitializeOrders() {
 	PrintCurrentState()
 }
 
-func PruneOrders() {
-	fmt.Printf("\n** PruneOrders **\n")
+func PruneBuys() {
+	fmt.Printf("\n** PruneBuys **\n")
 
 	// Should run when:
 	//   1. The currentPrice passes above or below a step
@@ -145,7 +145,6 @@ func CompoundOrders() {
 func CreateMissingBuys() {
 	fmt.Printf("\n** CreateMissingBuys **\n")
 
-	// Create Missing Buys
 	for a := 0; a < nextStepIndex; a++ {
 
 		// Is there NOT a sell at current step + 1 AND is there NOT a buy at current step?

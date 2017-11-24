@@ -99,7 +99,7 @@ func SetCurrentPrice(price float64) {
 			fmt.Printf("\n** Surpassed! **\n")
 			CreateSteps()
 			CreateMissingBuys()
-			PruneOrders()
+			PruneBuys()
 
 		// Has the current price dipped below the next lowest step?
 		} else if steps[nextStepIndex - 1] > price {
