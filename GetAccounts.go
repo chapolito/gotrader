@@ -6,7 +6,7 @@ import (
 
 // Get Accounts
 func GetAccounts() {
-	fmt.Printf("\n\n** GetAccounts **\n\n")
+	fmt.Printf("\n** GetAccounts **\n")
 
 	var err error
 	accounts, err = client.GetAccounts()
@@ -30,7 +30,7 @@ func GetAccounts() {
 		}
 	}
 
-	// assign account index for current trading pair/coin
+	// Assign account index for current trading pair/coin
 	if productId == "LTC-USD" {
 		thisCoinAccountIndex = ltcIndex
 	} else if productId == "ETH-USD" {

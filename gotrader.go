@@ -24,7 +24,7 @@ var existingBuys, existingSells Orders
 var totalBuys, totalSells, currentPrice, firstStep, lastStep, stepGap, totalSteps, holdSteps, twentyFourHourHigh, twentyFourHourLow, twentyFourHourAverage, profit, filledSellsTotal, FilledBuysTotal float64
 
 var steps []float64
-var btcIndex, usdIndex, ethIndex, ltcIndex, thisCoinAccountIndex, stepsIndex int
+var btcIndex, usdIndex, ethIndex, ltcIndex, thisCoinAccountIndex, nextStepIndex int
 var productId string
 
 var accounts []exchange.Account

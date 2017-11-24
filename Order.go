@@ -16,7 +16,7 @@ type Order struct {
 type Orders []Order
 
 func CreateOrder(side string, price float64, size float64) error {
-	fmt.Printf("\n\n** CreateOrder **\n")
+	fmt.Printf("\n** CreateOrder **\n")
 
 	thisOrder := exchange.Order{
 		Price:     price,
@@ -29,10 +29,10 @@ func CreateOrder(side string, price float64, size float64) error {
 	savedOrder, err := client.CreateOrder(&thisOrder)
 
 	if err != nil {
-		fmt.Printf("error: %v\n", err)
+		fmt.Printf("\nCreateOrder error: %v\n", err)
 		return err
 	} else {
-		fmt.Printf("%s order created for %f at $%f", savedOrder.Side, savedOrder.Size, savedOrder.Price)
+		fmt.Printf("\n%s order created for %f at $%f\n", savedOrder.Side, savedOrder.Size, savedOrder.Price)
 
 		// Update Lists of Buys / Sells
 		if side == "sell" {
@@ -46,32 +46,36 @@ func CreateOrder(side string, price float64, size float64) error {
 }
 
 func CancelOrder(id string) error {
-	fmt.Printf("\n** CancelOrder **\n\n")
+	fmt.Printf("\n** CancelOrder **\n")
 
 	err := client.CancelOrder(id)
 
 	if err != nil {
-		fmt.Printf("error: %v\n", err)
+		fmt.Printf("\nCancelOrder error: %v\n", err)
 		return err
 	} else {
 		return nil
 	}
 }
 
-// Get all Orders
+
 func GetOrders() error {
-	CleanseOrders()
-	ResetOrders()
 
-	println("\n\n** GetOrders ** \n\n")
+	fmt.Printf("\n** GetOrders **\n")
+
+	// Zero out previously recorded orders
+	existingSells = existingSells[:0]
+	existingBuys = existingBuys[:0]
+
+	// Get all Orders
 	var rawOrders []exchange.Order
-
 	cursor := client.ListOrders()
 	for cursor.HasMore {
 		if err := cursor.NextPage(&rawOrders); err != nil {
 			return err
 		}
 
+		// Record and categorize orders
 		for _, o := range rawOrders {
 			if o.Type == "limit" && o.ProductId == productId {
 				if o.Side == "sell" {
@@ -89,43 +93,65 @@ func GetOrders() error {
 
 func InitializeOrders() {
 
+	fmt.Printf("\n** InitializeOrders **\n")
+
+	// Run GetOrders to set existingBuys and existingSells
 	GetOrders()
 
-	// Match existing buys orders to steps. If no match create a buy order at that step.
-	// NOTE stepsIndex always points to the next higher step
-	for a := 0; a < stepsIndex; a++ {
-		if Contains(PricesExisting(existingBuys), steps[a]) {
-			fmt.Printf("Buy existing at: %f\n", steps[a])
-		} else if !Contains(PricesExisting(existingSells), steps[a + 1]) {
-			CreateOrder("buy", steps[a], HowMuchToBuy(steps[a]))
-		}
-	}
+	// Prune orders out of existingBuys
+	PruneOrders()
 
-	fmt.Printf("Current Price: %f\n", currentPrice)
+	// Create any missing buys that there are steps for
+	CreateMissingBuys()
 
-	// Print out existingSells at steps
-	for a := len(steps) - 1; a >= stepsIndex; a-- {
-		if Contains(PricesExisting(existingSells), steps[a]) {
-			fmt.Printf("Sell existing at: %f\n", steps[a])
-		}
-	}
+	// Cancel and recreate everything in existingBuys
+	CompoundOrders()
 
+	// Run GetOrders again to refresh existingBuys and existingSells
 	GetOrders()
 
 	PrintCurrentState()
 }
 
-func CleanseOrders() {
-	// Loop through existing orders, cancel them, then recreate them if still needed
-	// Recreating ensures any profits get pulled in to start compounding.
+func PruneOrders() {
+	fmt.Printf("\n** PruneOrders **\n")
+
+	// Should run when:
+	//   1. The currentPrice passes above or below a step
+
+	// Loop through existing buys
+	// check if price is still within steps[], if it is not, cancel and remove from existingBuys
+	for _, o := range existingBuys {
+		if !Contains(steps, o.Price) {
+			CancelOrder(o.Id)
+		}
+	}
+
+	// Run GetOrders to refresh existingBuys (and existingSells)
+	GetOrders()
+}
+
+func CompoundOrders() {
+	fmt.Printf("\n** CompoundOrders **\n")
+
+	// Loop through existing orders, cancel them, then recreate
+	// HowMuchToBuy() ensures any profits get pulled in to start compounding.
 	for _, o := range existingBuys {
 		CancelOrder(o.Id)
+		CreateOrder("buy", o.Price, HowMuchToBuy(o.Price))
+	}
+}
 
-		// Loop through steps, check if price is still within steps[], if it is, recreate
-		for _, s := range steps {
-			if o.Price == s {
-				CreateOrder("buy", o.Price, HowMuchToBuy(o.Price))
-			}
+func CreateMissingBuys() {
+	fmt.Printf("\n** CreateMissingBuys **\n")
+
+	// Create Missing Buys
+	for a := 0; a < nextStepIndex; a++ {
+
+		// Is there NOT a sell at current step + 1 AND is there NOT a buy at current step?
+		if !Contains(PricesExisting(existingSells), steps[a + 1]) && !Contains(PricesExisting(existingBuys), steps[a]) {
+			fmt.Printf("\n** Buy needs to be created! **\n")
+			CreateOrder("buy", steps[a], HowMuchToBuy(steps[a]))
 		}
 	}
 }
@@ -142,10 +168,4 @@ func PricesExisting(o Orders) []float64 {
 		pricesWithBuys = append(pricesWithBuys, a.Price)
 	}
 	return pricesWithBuys
-}
-
-func ResetOrders() {
-	// Clear out previously recorded orders
-	existingSells = existingSells[:0]
-	existingBuys = existingBuys[:0]
 }

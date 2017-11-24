@@ -6,22 +6,38 @@ import (
 
 func PrintCurrentState() {
 
+	// Print out existingBuys at steps
+	for a := 0; a < nextStepIndex; a++ {
+		if Contains(PricesExisting(existingBuys), steps[a]) {
+			fmt.Printf("Buy existing at: %f\n", steps[a])
+		}
+	}
+
+	fmt.Printf("---\nCurrent Price: %f\n---\n", currentPrice)
+
+	// Print out existingSells at steps
+	for a := nextStepIndex; a <= len(steps) - 1; a++ {
+		if Contains(PricesExisting(existingSells), steps[a]) {
+			fmt.Printf("Sell existing at: %f\n", steps[a])
+		}
+	}
+
 	// Print Balances
-	fmt.Printf("USD - Balance: $%f, Hold: $%f, Available: $%f\n\n", accounts[usdIndex].Balance, accounts[usdIndex].Hold, accounts[usdIndex].Available)
-	fmt.Printf("BTC - Balance: $%f, Hold: $%f, Available: $%f\n\n", accounts[btcIndex].Balance, accounts[btcIndex].Hold, accounts[btcIndex].Available)
-	fmt.Printf("ETH - Balance: $%f, Hold: $%f, Available: $%f\n\n", accounts[ethIndex].Balance, accounts[ethIndex].Hold, accounts[ethIndex].Available)
-	fmt.Printf("LTC - Balance: $%f, Hold: $%f, Available: $%f\n\n", accounts[ltcIndex].Balance, accounts[ltcIndex].Hold, accounts[ltcIndex].Available)
+	fmt.Printf("\nUSD - Balance: $%f, Hold: $%f, Available: $%f\n", accounts[usdIndex].Balance, accounts[usdIndex].Hold, accounts[usdIndex].Available)
+	fmt.Printf("\nBTC - Balance: $%f, Hold: $%f, Available: $%f\n", accounts[btcIndex].Balance, accounts[btcIndex].Hold, accounts[btcIndex].Available)
+	fmt.Printf("\nETH - Balance: $%f, Hold: $%f, Available: $%f\n", accounts[ethIndex].Balance, accounts[ethIndex].Hold, accounts[ethIndex].Available)
+	fmt.Printf("\nLTC - Balance: $%f, Hold: $%f, Available: $%f\n", accounts[ltcIndex].Balance, accounts[ltcIndex].Hold, accounts[ltcIndex].Available)
 
 	// How to get current price for each currency?
 	//fmt.Printf("Total worth in USD: %f\n\n", accounts[usdIndex].Balance + accounts[ethIndex].Balance * currentPriceETH + accounts[ltcIndex].Balance * currentPriceLTC)
 
 	// totalBuys is similar to accounts[usdIndex].Hold, but it takes into consideration partially filled orders
 	totalBuys = TotalBuys()
-	fmt.Printf("Buys: %d\nCost: $%f\n\n", len(existingBuys), totalBuys)
+	fmt.Printf("\nBuys: %d\nCost: $%f\n", len(existingBuys), totalBuys)
 
 	// totalSells is similar to accounts[ethIndex].Hold, but it takes into consideration partially filled orders
 	totalSells = TotalSells()
-	fmt.Printf("Sells: %d\nCost: $%f\n\n", len(existingSells), totalSells)
+	fmt.Printf("\nSells: %d\nCost: $%f\n", len(existingSells), totalSells)
 }
 
 func TotalBuys() float64 {
