@@ -158,7 +158,12 @@ func CreateMissingBuys() {
 func HowMuchToBuy(price float64) float64 {
 	// Minimium Buys are 0.01 ETH/LTC/BTC
 	// Dividing by 2 to split between ETH and LTC
-	return float64(int(((accounts[usdIndex].Balance / (totalSteps - float64(len(existingSells)))) / price) * 10000)) / 10000 / 2
+	//return float64(int((((accounts[usdIndex].Balance / 2.0) / (totalSteps - float64(len(existingSells)))) / price) * 10000)) / 10000
+	totalUSDAvailable := accounts[usdIndex].Balance / 2.0
+	totalStepsMinusSells := totalSteps - float64(len(existingSells))
+	amountPerStepAvailable := totalUSDAvailable / totalStepsMinusSells
+	howMuchToBuy := float64(int((amountPerStepAvailable / price) * 10000)) / 10000
+	return howMuchToBuy
 }
 
 func PricesExisting(o Orders) []float64 {

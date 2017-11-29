@@ -40,7 +40,10 @@ func MonitorExchange() {
 			break
 		}
 
-		if message.Type == "match" {
+		if message.Type == "done" && message.Reason == "filled" {
+
+			fmt.Printf("\n\nRemaining Size: %f || Old Size: %f || New Size: %f || Side: %s || Price: %f \n\n", message.RemainingSize, message.OldSize, message.NewSize, message.Side, message.Price)
+			// fmt.Printf("\nRemaining Size: %f\n", message.RemainingSize)
 
 			SetCurrentPrice(message.Price)
 

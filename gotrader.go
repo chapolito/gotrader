@@ -33,7 +33,7 @@ var client *exchange.Client
 func main() {
 
 	currentPrice = 0.0
-	holdSteps = 14.0
+	holdSteps = 12.0
 
 	productId = os.Getenv("PRODUCT_ID")
 
