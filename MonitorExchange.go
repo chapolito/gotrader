@@ -53,13 +53,8 @@ func MonitorExchange() {
 					if message.MakerOrderId == o.Id {
 						fmt.Printf("\n** Buy Happened! **\n")
 
-						// Is this match a complete order?
-						if message.RemainingSize != 0.0 {
-							fmt.Printf("\nINCOMPLETE ORDER: only %f of %f filled\n", message.RemainingSize, o.Size)
-						} else {
-							// Create Sell at buy price plus stepGap
-							CreateOrder("sell", o.Price + stepGap, o.Size)
-						}
+						// Create Sell at buy price plus stepGap
+						CreateOrder("sell", o.Price + stepGap, o.Size)
 					}
 				}
 			} else if message.Side == "sell" {
@@ -68,13 +63,8 @@ func MonitorExchange() {
 					if message.MakerOrderId == o.Id {
 						fmt.Printf("\n** Sell Happened! **\n")
 
-						// Is this match a complete order?
-						if message.RemainingSize != 0.0 {
-							fmt.Printf("\nINCOMPLETE ORDER: only %f of %f filled\n", message.RemainingSize, o.Size)
-						} else {
-							// Create buy order at sell price minus stepGap
-							CreateOrder("buy", o.Price - stepGap, o.Size)
-						}
+						// Create buy order at sell price minus stepGap
+						CreateOrder("buy", o.Price - stepGap, o.Size)
 					}
 				}
 			}

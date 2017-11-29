@@ -125,6 +125,13 @@ func PruneBuys() {
 		if !Contains(steps, o.Price) {
 			CancelOrder(o.Id)
 		}
+
+
+		for _, p := range existingBuys {
+			if o.Price == p.Price {
+				CancelOrder(o.Id)
+			}
+		}
 	}
 
 	// Run GetOrders to refresh existingBuys (and existingSells)
