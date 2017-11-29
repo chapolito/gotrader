@@ -128,7 +128,7 @@ func PruneBuys() {
 
 
 		for _, p := range existingBuys {
-			if o.Price == p.Price {
+			if o.Price == p.Price && o.Id != p.Id {
 				CancelOrder(o.Id)
 			}
 		}
